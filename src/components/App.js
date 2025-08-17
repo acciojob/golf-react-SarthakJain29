@@ -9,24 +9,37 @@ class App extends Component {
             posi : 0,
             ballPosition: { left: "0px" }
         };
-        this.renderChoice = this.renderBallOrButton.bind(this)
-        this.buttonClickHandler = this.buttonClickHandler.bind(this)
+        this.renderChoice = this.renderBallOrButton.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+        this.buttonClickHandler = this.buttonClickHandler.bind(this);
     };
 
     buttonClickHandler() {
-   
+        this.setState({renderBall: true});
    }
+
+   handleKeyDown(event) {
+    if (event.keyCode === 39) { // Right Arrow
+      let currentLeft = parseInt(this.state.ballPosition.left, 10);
+      this.setState({
+        ballPosition: { left: currentLeft + 5 + "px" }
+      });
+    }
+  }
+    componentDidMount() {
+        document.addEventListener("keydown", this.handleKeyDown);
+    } 
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyDown);
+    }
+
     renderBallOrButton() {
 		if (this.state.renderBall) {
 		    return <div className="ball" style={this.state.ballPosition}></div>
 		} else {
-		    return <button onClick={this.buttonClickHandler} >Start</button>
+		    return <button className="start" onClick={this.buttonClickHandler} >Start</button>
 		}
-    }
-
-    // bind ArrowRight keydown event
-    componentDidMount() {
-      
     }
 
     render() {
